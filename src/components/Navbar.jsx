@@ -7,7 +7,15 @@ import * as FiIcons from 'react-icons/fi';
 const { FiUser, FiLogOut, FiBell } = FiIcons;
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <motion.nav 
@@ -43,7 +51,7 @@ const Navbar = () => {
           </div>
 
           <button 
-            onClick={logout}
+            onClick={handleSignOut}
             className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
             <SafeIcon icon={FiLogOut} className="w-5 h-5" />

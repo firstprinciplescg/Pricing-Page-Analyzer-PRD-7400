@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useScan } from '../contexts/ScanContext';
@@ -6,12 +6,17 @@ import { format } from 'date-fns';
 import SafeIcon from '../common/SafeIcon';
 import * as FiIcons from 'react-icons/fi';
 
-const { FiExternalLink, FiDownload, FiCheckCircle, FiAlertCircle } = FiIcons;
+const { FiExternalLink, FiDownload, FiCheckCircle } = FiIcons;
 
 const ScanResults = () => {
   const { id } = useParams();
-  const { scans } = useScan();
-  const scan = scans.find(s => s.id === id);
+  const { getScanById } = useScan();
+  const [scan, setScan] = useState(null);
+
+  useEffect(() => {
+    const foundScan = getScanById(id);
+    setScan(foundScan);
+  }, [id, getScanById]);
 
   if (!scan) {
     return (
@@ -33,7 +38,6 @@ const ScanResults = () => {
   };
 
   const exportPDF = () => {
-    // Mock PDF export - replace with actual implementation
     console.log('Exporting PDF for scan:', scan.id);
   };
 
@@ -87,19 +91,19 @@ const ScanResults = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-gray-600">Clarity Score</span>
-                <span className="font-medium">85/100</span>
+                <span className="font-medium">{scan.metrics?.clarity || 85}/100</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Trust Indicators</span>
-                <span className="font-medium">92/100</span>
+                <span className="font-medium">{scan.metrics?.trust || 92}/100</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">CTA Effectiveness</span>
-                <span className="font-medium">78/100</span>
+                <span className="font-medium">{scan.metrics?.cta || 78}/100</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Mobile Optimization</span>
-                <span className="font-medium">95/100</span>
+                <span className="font-medium">{scan.metrics?.mobile || 95}/100</span>
               </div>
             </div>
           </div>
@@ -114,7 +118,7 @@ const ScanResults = () => {
       >
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Recommendations</h2>
         <div className="space-y-4">
-          {scan.recommendations.map((recommendation, index) => (
+          {scan.recommendations?.map((recommendation, index) => (
             <div key={index} className="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg">
               <SafeIcon icon={FiCheckCircle} className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>

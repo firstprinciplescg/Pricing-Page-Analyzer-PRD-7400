@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import ScanResults from './pages/ScanResults';
 import CompetitorCompare from './pages/CompetitorCompare';
@@ -25,11 +26,31 @@ function App() {
           >
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-              <Route path="/scan/:id" element={<Layout><ScanResults /></Layout>} />
-              <Route path="/compare" element={<Layout><CompetitorCompare /></Layout>} />
-              <Route path="/settings" element={<Layout><Settings /></Layout>} />
-              <Route path="/admin" element={<Layout><AdminDashboard /></Layout>} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Layout><Dashboard /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/scan/:id" element={
+                <ProtectedRoute>
+                  <Layout><ScanResults /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/compare" element={
+                <ProtectedRoute>
+                  <Layout><CompetitorCompare /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Layout><Settings /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <Layout><AdminDashboard /></Layout>
+                </ProtectedRoute>
+              } />
             </Routes>
           </motion.div>
         </Router>
