@@ -1,0 +1,54 @@
+.app-container {
+  min-height: 100vh;
+  background-color: #FFFFFF;
+}
+
+.grade-a { color: #10B981; }
+.grade-b { color: #F59E0B; }
+.grade-c { color: #EF4444; }
+.grade-d { color: #DC2626; }
+.grade-f { color: #991B1B; }
+
+.scan-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.scan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #6EC1E4;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.toast.success {
+  background-color: #10B981;
+  color: white;
+}
+
+.toast.error {
+  background-color: #EF4444;
+  color: white;
+}
