@@ -16,12 +16,12 @@ const Sidebar = () => {
     { to: '/settings', icon: FiSettings, label: 'Settings' },
   ];
 
-  if (user?.role === 'admin') {
+  if (user?.isAdmin) {
     navItems.push({ to: '/admin', icon: FiShield, label: 'Admin' });
   }
 
   return (
-    <motion.aside 
+    <motion.aside
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       className="fixed top-16 left-0 h-full w-64 bg-white border-r border-gray-200 p-6"

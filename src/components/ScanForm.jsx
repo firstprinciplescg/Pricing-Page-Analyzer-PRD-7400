@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useScan } from '../contexts/ScanContext';
+import { getPlanConfig } from '../config/constants';
 import SafeIcon from '../common/SafeIcon';
 import * as FiIcons from 'react-icons/fi';
 
@@ -41,6 +42,8 @@ const ScanForm = ({ onScanComplete }) => {
     }
   };
 
+  const planConfig = getPlanConfig(user?.plan);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -50,7 +53,7 @@ const ScanForm = ({ onScanComplete }) => {
       <h2 className="text-xl font-semibold text-gray-900 mb-4">
         Analyze Pricing Page
       </h2>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
@@ -108,7 +111,7 @@ const ScanForm = ({ onScanComplete }) => {
         <div className="mt-4 p-4 bg-gradient-to-r from-accent to-primary rounded-lg">
           <p className="text-white font-medium">Get unlimited scans → Pro</p>
           <p className="text-white text-sm opacity-90 mt-1">
-            Upgrade to Pro for $25/month and get unlimited pricing page scans
+            Upgrade to Pro for ${planConfig.price}/month and get unlimited pricing page scans
           </p>
         </div>
       )}

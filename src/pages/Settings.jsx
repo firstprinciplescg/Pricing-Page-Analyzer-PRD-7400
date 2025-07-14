@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { APP_CONFIG, getPlanConfig } from '../config/constants';
 import SafeIcon from '../common/SafeIcon';
 import * as FiIcons from 'react-icons/fi';
 
-const { FiSave, FiClock, FiCreditCard, FiUser } = FiIcons;
+const { FiSave, FiClock, FiCreditCard, FiUser, FiGlobe } = FiIcons;
 
 const Settings = () => {
   const { user } = useAuth();
@@ -16,9 +17,11 @@ const Settings = () => {
   });
 
   const handleSave = () => {
-    // Mock save settings
     console.log('Saving settings:', settings);
+    // TODO: Implement settings save to Supabase
   };
+
+  const planConfig = getPlanConfig(user?.plan);
 
   return (
     <div className="space-y-8">
@@ -43,7 +46,7 @@ const Settings = () => {
             <SafeIcon icon={FiUser} className="w-5 h-5 text-gray-600" />
             <h2 className="text-xl font-semibold text-gray-900">Account Information</h2>
           </div>
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -56,7 +59,7 @@ const Settings = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Current Plan
@@ -71,6 +74,71 @@ const Settings = () => {
                   </button>
                 )}
               </div>
+              
+              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                <h4 className="font-medium text-gray-900 mb-2">Plan Features:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {planConfig.features.map((feature, index) => (
+                    <li key={index} className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Scan Usage
+              </label>
+              <div className="text-sm text-gray-600">
+                {user?.scanLimit ? (
+                  <span>
+                    {user.scanCount} / {user.scanLimit} scans used this month
+                  </span>
+                ) : (
+                  <span>Unlimited scans available</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white rounded-lg border border-gray-200 p-6"
+        >
+          <div className="flex items-center space-x-3 mb-4">
+            <SafeIcon icon={FiGlobe} className="w-5 h-5 text-gray-600" />
+            <h2 className="text-xl font-semibold text-gray-900">Application Info</h2>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Application Domain
+              </label>
+              <input
+                type="text"
+                value={APP_CONFIG.DOMAIN}
+                disabled
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Version
+              </label>
+              <input
+                type="text"
+                value={APP_CONFIG.APP_VERSION}
+                disabled
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+              />
             </div>
           </div>
         </motion.div>
@@ -79,14 +147,14 @@ const Settings = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.3 }}
             className="bg-white rounded-lg border border-gray-200 p-6"
           >
             <div className="flex items-center space-x-3 mb-4">
               <SafeIcon icon={FiClock} className="w-5 h-5 text-gray-600" />
               <h2 className="text-xl font-semibold text-gray-900">Scheduled Scans</h2>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -95,7 +163,7 @@ const Settings = () => {
                 <input
                   type="text"
                   value={settings.scheduleCron}
-                  onChange={(e) => setSettings({...settings, scheduleCron: e.target.value})}
+                  onChange={(e) => setSettings({ ...settings, scheduleCron: e.target.value })}
                   placeholder="0 9 * * 1"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
@@ -103,7 +171,7 @@ const Settings = () => {
                   Current: Every Monday at 9:00 AM
                 </p>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Default Competitor URL
@@ -111,7 +179,7 @@ const Settings = () => {
                 <input
                   type="url"
                   value={settings.competitorUrl}
-                  onChange={(e) => setSettings({...settings, competitorUrl: e.target.value})}
+                  onChange={(e) => setSettings({ ...settings, competitorUrl: e.target.value })}
                   placeholder="https://competitor.com/pricing"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
@@ -123,11 +191,11 @@ const Settings = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
           className="bg-white rounded-lg border border-gray-200 p-6"
         >
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Notifications</h2>
-          
+
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
@@ -141,11 +209,11 @@ const Settings = () => {
               <input
                 type="checkbox"
                 checked={settings.emailNotifications}
-                onChange={(e) => setSettings({...settings, emailNotifications: e.target.checked})}
+                onChange={(e) => setSettings({ ...settings, emailNotifications: e.target.checked })}
                 className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Slack Webhook URL
@@ -153,7 +221,7 @@ const Settings = () => {
               <input
                 type="url"
                 value={settings.slackWebhook}
-                onChange={(e) => setSettings({...settings, slackWebhook: e.target.value})}
+                onChange={(e) => setSettings({ ...settings, slackWebhook: e.target.value })}
                 placeholder="https://hooks.slack.com/services/..."
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               />
@@ -164,7 +232,7 @@ const Settings = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.5 }}
           className="flex justify-end"
         >
           <button
